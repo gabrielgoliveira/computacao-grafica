@@ -26,12 +26,9 @@ void desenhaQuadrado(Quadrado quad) {
   glEnd();
 }
 
-void imprimeQuadrado() {
+void imprimeQuadradoPrintf() {
   printf("=============================\n");
-  printf("Aresta 1 (%.3f, %.3f)\n", quadrado.lados[0].x, quadrado.lados[0].y);
-  printf("Aresta 2 (%.3f, %.3f)\n", quadrado.lados[1].x, quadrado.lados[1].y);
-  printf("Aresta 3 (%.3f, %.3f)\n", quadrado.lados[2].x, quadrado.lados[2].y);
-  printf("Aresta 4 (%.3f, %.3f)\n", quadrado.lados[3].x, quadrado.lados[3].y);
+  for(int i = 0; i < 4; i++) printf("Aresta %d (%.3f, %.3f)\n", i+1, quadrado.lados[i].x, quadrado.lados[i].y);
   printf("=============================\n");
 }
 
@@ -48,7 +45,14 @@ void rotacao(float valor) {
 
   for(int i = 0; i < 4; i++) {
     quadrado.lados[i].x = quadrado.lados[i].x*cosseno - quadrado.lados[i].y*seno;
-    quadrado.lados[i].y = quadrado.lados[i].x*seno - quadrado.lados[i].y*cosseno;
+    quadrado.lados[i].y = quadrado.lados[i].x*seno + quadrado.lados[i].y*cosseno;
+  }  
+}
+
+void escala(float valor) {
+  for(int i = 0; i < 4; i++) {
+    quadrado.lados[i].x *= valor;
+    quadrado.lados[i].y *= valor;
   }  
 }
 
@@ -73,22 +77,28 @@ void inicializaQuadrado() {
 
 void display() {
   int sentidoMovimento = 1;
-  float grauInicial = 40.0;
+  float grauInicial = 90;
+  float grauEscala = 1;
   while(1) {
     glClear(GL_COLOR_BUFFER_BIT);
     glColor3f(0.7f, 0.5f, 0.4f);
      
     desenhaQuadrado(quadrado);
+
     if(quadrado.lados[0].x >= LARGURA_JANELA) {
       sentidoMovimento = -1;
     } else if(quadrado.lados[1].x < -LARGURA_JANELA) {
        sentidoMovimento = 1;
     }
-    // transalacao(sentidoMovimento*GRAU_MOVIMENTO);
-    rotacao(grauInicial);
-    grauInicial += 1;
-    if(grauInicial >= 360) grauInicial = 45;
-    imprimeQuadrado();
+    if(grauEscala > 2) {
+      grauEscala /= 2;
+    } else {
+      grauEscala *= 0.5;
+    }
+    transalacao(sentidoMovimento*GRAU_MOVIMENTO);
+    // rotacao(grauInicial++);
+    // escala(grauEscala);
+    imprimeQuadradoPrintf();
     glFlush();
   }
 }
