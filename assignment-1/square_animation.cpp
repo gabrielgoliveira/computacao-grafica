@@ -77,6 +77,8 @@ void inicializaQuadrado() {
 
 void display() {
   int sentidoMovimento = 1;
+  int sentidoCrescimento = 1;
+  int tamInicialQuadrado = 5;
   float grauInicial = 90;
   float grauEscala = 1;
   while(1) {
@@ -90,14 +92,16 @@ void display() {
     } else if(quadrado.lados[1].x < -LARGURA_JANELA) {
        sentidoMovimento = 1;
     }
-    if(grauEscala > 2) {
-      grauEscala /= 2;
+    if(quadrado.lados[0].x > tamInicialQuadrado*2) {
+      sentidoCrescimento = -1;
     } else {
-      grauEscala *= 0.5;
+      sentidoCrescimento = 1;
     }
-    transalacao(sentidoMovimento*GRAU_MOVIMENTO);
+    // transalacao(sentidoMovimento*GRAU_MOVIMENTO);
     // rotacao(grauInicial++);
-    // escala(grauEscala);
+    printf("Grau Escala : %.2f", grauEscala);
+    grauEscala = (grauEscala) + (sentidoCrescimento)*0.00001;
+    escala(grauEscala);
     imprimeQuadradoPrintf();
     glFlush();
   }
